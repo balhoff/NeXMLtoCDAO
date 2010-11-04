@@ -27,4 +27,5 @@ object CDAO {
     val HAS_FLOAT_VALUE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_Float_Value")
     val HAS_STATE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_State")
     val HAS_COMPOUND_STATE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_Compound_State")
+    val HAS_ELEMENT = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_Element")
 }
