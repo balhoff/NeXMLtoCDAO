@@ -5,6 +5,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/owlapi-bin.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/nexmlbeans2009.jar"/>
+	<classpathentry kind="lib" path="lib/xbean.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NeXML"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
