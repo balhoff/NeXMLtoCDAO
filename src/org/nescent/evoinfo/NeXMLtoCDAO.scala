@@ -58,11 +58,13 @@ object NeXMLtoCDAO {
             val format = block.getFormat //TODO
             format match {
             case protein: AAFormat => {}
-            //, ContinuousFormat, DNAFormat, RNAFormat, RestrictionFormat,
+            case continuous: ContinuousFormat => { translateContinuousFormat(continuous, block) }
+            case dna: DNAFormat => {}
+            case rna: RNAFormat => {}
+            case restriction: RestrictionFormat => {}
             case standard: StandardFormat => { translateStandardFormat(standard, block) }
             }
             val otus = availableOtuLists(block.getOtus)
-            //TODO need to set has_TU 
             for (otu <- otus.getOtuArray) {
                 addPropertyAssertion(individual, CDAO.HAS_TU, iri(otu.getId))
             }
@@ -71,18 +73,24 @@ object NeXMLtoCDAO {
 
     def translateAbstractFormat(format: AbstractFormat, individual: OWLIndividual, containingMatrix: AbstractBlock): Unit = {
             translateAnnotated(format, individual)
-            //TODO
             for (character <- format.getCharArray) {
                 addPropertyAssertion(iri(containingMatrix.getId), CDAO.HAS_CHARACTER, iri(character.getId))
                 character match {
                     //TODO
-                    //AAChar, ContinuousChar, DNAChar, RNAChar, RestrictionChar, 
+                case continuous: ContinuousChar => { translateContinuousCharacter(continuous) }
+                case protein: AAChar => {}
+                case dna: DNAChar => {}
+                case rna: RNAChar => {}
+                case restriction: RestrictionChar => {}
                 case standard: StandardChar => { translateStandardCharacter(standard) }
                 }
             }
             for (statesSet <- format.getStatesArray) {
-                statesSet match {
-                    // AAStates, DNAStates, RNAStates, RestrictionStates, StandardStates,
+                statesSet match { //TODO
+                case protein: AAStates => {}
+                case dna: DNAStates => {}
+                case rna: RNAStates => {}
+                case restriction: RestrictionStates => {}
                 case standard: StandardStates => { translateStandardStatesSet(standard) }
                 }
             }
@@ -102,11 +110,70 @@ object NeXMLtoCDAO {
             translateLabelled(states, individual)
             for (state <- states.getStateArray) {
                 state match { //TODO
-                    // AAState, AbstractUncertainStateSet, DNAState, RNAState, RestrictionState, 
+                case protein: AAState => {}
+                case uncertain: AbstractUncertainStateSet => { matchUncertainStateSet(uncertain) }
+                case dna: DNAState => {}
+                case rna: RNAState => {}
+                case restriction: RestrictionState => {} 
                 case standard: StandardState => { translateStandardState(standard) }
                 }
             }
-            //TODO polymorphic, etc.
+            for (state <- states.getPolymorphicStateSetArray) {
+                matchPolymorphicStateSet(state)
+            }
+            for (state <- states.getUncertainStateSetArray) {
+                matchUncertainStateSet(state)
+            }
+    }
+
+    def matchUncertainStateSet(states: AbstractUncertainStateSet): Unit = {
+            states match { //TODO
+            case protein: AAUncertainStateSet => {}
+            case polymorphic: AbstractPolymorphicStateSet => { matchPolymorphicStateSet(polymorphic) }
+            case dna: DNAUncertainStateSet => {}
+            case rna: RNAUncertainStateSet => {}
+            case standard: StandardUncertainStateSet => { translateStandardUncertainStateSet(standard) }
+            }
+    }
+
+    def matchPolymorphicStateSet(states: AbstractPolymorphicStateSet): Unit = {
+            //TODO 
+            states match {
+            case protein: AAPolymorphicStateSet => {}
+            case dna: DNAPolymorphicStateSet => {}
+            case rna: RNAPolymorphicStateSet => {}
+            case standard: StandardPolymorphicStateSet  => { translateStandardPolymorphicStateSet(standard) }
+            }
+    }
+
+    def translateAbstractPolymorphicStateSet(states: AbstractPolymorphicStateSet, individual: OWLIndividual): Unit = {
+            //FIXME CDAO does not have uncertain with polymorphic as subclass but NeXML does
+            //translateAbstractUncertainStateSet(states, individual)
+            translateAbstractState(states, individual)
+            addClassAssertion(CDAO.POLYMORPHIC_STATE, individual)
+            for (member <- states.getMemberArray) {
+                //FIXME is has_element correct here?
+                addPropertyAssertion(individual, CDAO.HAS_ELEMENT, iri(member.getState))
+            }
+    }
+
+    def translateStandardPolymorphicStateSet(states: StandardPolymorphicStateSet): Unit = {
+            val individual = dataFactory.getOWLNamedIndividual(iri(states.getId))
+            translateAbstractPolymorphicStateSet(states, individual)
+    }
+
+    def translateStandardUncertainStateSet(states: StandardUncertainStateSet): Unit = {
+            val individual = dataFactory.getOWLNamedIndividual(iri(states.getId))
+            translateAbstractUncertainStateSet(states, individual)
+    }
+
+    def translateAbstractUncertainStateSet(states: AbstractUncertainStateSet, individual: OWLIndividual): Unit = {
+            translateAbstractState(states, individual)
+            addClassAssertion(CDAO.UNCERTAIN_STATE, individual)
+            for (member <- states.getMemberArray) {
+                //FIXME is has_element correct here?
+                addPropertyAssertion(individual, CDAO.HAS_ELEMENT, iri(member.getState))
+            }
     }
 
     def translateStandardStatesSet(states: StandardStates): Unit = {
@@ -118,11 +185,22 @@ object NeXMLtoCDAO {
             translateLabelled(character, individual)
     }
 
+    def translateContinuousCharacter(character: ContinuousChar): Unit = {
+            val individual = dataFactory.getOWLNamedIndividual(iri(character.getId))
+            translateAbstractCharacter(character, individual)
+            addClassAssertion(CDAO.CONTINUOUS_CHARACTER, iri(character.getId))
+    }
+
     def translateStandardCharacter(character: StandardChar): Unit = {
             val individual = dataFactory.getOWLNamedIndividual(iri(character.getId))
             translateAbstractCharacter(character, individual)
             addClassAssertion(CDAO.STANDARD_CHARACTER, iri(character.getId))
 
+    }
+
+    def translateContinuousFormat(format: ContinuousFormat, containingMatrix: AbstractBlock): Unit = {
+            val individual = dataFactory.getOWLNamedIndividual(iri(format.getId))
+            translateAbstractFormat(format, individual, containingMatrix)
     }
 
     def translateStandardFormat(format: StandardFormat, containingMatrix: AbstractBlock): Unit = {

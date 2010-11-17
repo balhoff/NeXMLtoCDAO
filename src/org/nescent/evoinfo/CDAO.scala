@@ -14,7 +14,9 @@ object CDAO {
     val STANDARD_STATE_DATUM = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#StandardStateDatum")
     val CONTINUOUS_STATE_DATUM = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#ContinuousStateDatum")
     val STANDARD_STATE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#Standard")
-    val COMPOUND_STATE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#Compound")
+    val UNCERTAIN_STATE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#UncertainStateDomain")
+    val POLYMORPHIC_STATE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#PolymorphicStateDomain")
+    
     
     val HAS_TU = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_TU")
     val HAS_CHARACTER = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_Character")
