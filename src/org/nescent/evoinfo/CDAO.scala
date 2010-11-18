@@ -18,6 +18,7 @@ object CDAO {
     val POLYMORPHIC_STATE = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#PolymorphicStateDomain")
     
     
+    val HAS = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has")
     val HAS_TU = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_TU")
     val HAS_CHARACTER = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_Character")
     val HAS_STANDARD_DATUM = IRI.create("http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#has_Standard_Datum")

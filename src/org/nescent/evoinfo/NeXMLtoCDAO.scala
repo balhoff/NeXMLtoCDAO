@@ -171,8 +171,7 @@ object NeXMLtoCDAO {
             translateAbstractState(states, individual)
             addClassAssertion(CDAO.UNCERTAIN_STATE, individual)
             for (member <- states.getMemberArray) {
-                //FIXME is has_element correct here?
-                addPropertyAssertion(individual, CDAO.HAS_ELEMENT, iri(member.getState))
+                addPropertyAssertion(individual, CDAO.HAS, iri(member.getState))
             }
     }
 
